@@ -7,11 +7,11 @@ $("#verbPage").bind("pageinit",function(event,data){
 			var listItem = $("<li></li>",{class:"li_level1",value:index}).append(aItem);
 			$("#verbListView").append(listItem);
 		});
+		$(".li_level1").one("tap",function(event,data){
+			var value = $(this).attr("value");
+			selectedPath.level1 = value;
+			console.log("value is %d",value);
+		});
 		$("#verbListView").listview("refresh");
 	},"xml");
-	
-	$(".li_level1").one("tap",function(event,data){
-		var value = $(this).attr("value");
-		console.log("value is %d",value);
-	});
 });
