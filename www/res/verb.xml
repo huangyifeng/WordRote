@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<array name="verb_type_list">
+     <item>「～う」结尾的一类动词</item>
+     <item>「～ぐ」结尾的一类动词</item>
+     <item>「～く」结尾的一类动词</item>
+     <item>「～す」结尾的一类动词</item>
+     <item>「～つ」结尾的一类动词</item>
+     <item>「～ぶ」结尾的一类动词</item>
+     <item>「～ぬ」「～む」结尾的一类动词</item>
+     <item>「～る」结尾的一类动词</item>
+     <item>「～る」结尾的二类动词</item>
+     <item>单汉字三类动词</item>
+ </array>
