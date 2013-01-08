@@ -9,7 +9,9 @@ $(document).bind("mobileinit",function(event,data){
 });
 
 $("#mainPage").live("pageinit",function(event,data){
-	$.mobile.changePage("./html/verb.html",{
-		transition:"flip",
-	});
+	$.mobile.changePage("./html/verb.html");
+	$(".li_level0").live("tap",function(event,data){
+		selectedPath.level0 = $(this).attr("value");
+		console.log("tap fired : %d",selectedPath.level0);
+	}).eq(selectedPath.level0).addClass("ui-btn-active");
 });
