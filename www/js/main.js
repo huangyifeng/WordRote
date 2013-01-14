@@ -15,3 +15,21 @@ $("#mainPage").live("pageinit",function(event,data){
 		console.log("tap fired : %d",selectedPath.level0);
 	}).eq(selectedPath.level0).addClass("ui-btn-active");
 });
+
+//cvs operation ===========================
+
+
+
+var parseCSV = function(csvString)
+{
+    $.csv.toArray(csvString,null,saveWordsToDB);
+}
+
+//db operation ============================
+
+var saveWordsToDB = function(wordsArray)
+{
+	
+}
+
+//=========================================
