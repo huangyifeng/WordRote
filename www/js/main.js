@@ -4,6 +4,8 @@ var selectedPath = {
 	level2 : 0
 };
 
+var wordsFromFile = null;
+
 $(document).bind("mobileinit",function(event,data){
 	$.mobile.defaultPageTransition = "slide";
 });
@@ -28,7 +30,6 @@ var readCSV = function()
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onError);
 };
 
-
 var onFileSystemSuccess = function(fileSystem){
 	fileSystem.root.getFile("wordlist.csv",null,gotFileEntry,onError);
 	console.log("file system OK");
@@ -46,7 +47,6 @@ var gotFile = function(file){
 	reader.readAsText(file);
 };
 
-
 var parseCSV = function(csvString)
 {
     $.csv.toArrays(csvString,{},saveWordsToDB);
@@ -57,12 +57,51 @@ var parseCSV = function(csvString)
 var saveWordsToDB = function(error,wordsArray)
 {
 	console.log(wordsArray);
+	wordsFromFile = wordsArray;
 	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",1000000);
-	db.transaction("initDB")
+	db.transaction(initDB,onError,initDBSuccess);
+};
+
+var initDB = function(transaction){
+	var tableName = "Words";
+	transaction.executeSql("Drop table if exists " + tableName);
+	transaction.executeSql("Create table if not exists " + tableName + 
+			"('col_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
+			"'level0' INTEGER DEFAULT 0," +
+			"'level1' INTEGER DEFAULT 0," +
+			"'level2' INTEGER DEFAULT 0," +
+			"'jiaming' VARCHAR(255)," +
+			"'jieshi' VARCHAR(255))");
+};
+
+var initDBSuccess = function(){
+	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",1000000);
+	db.transaction(insertRecords,onError,insertRecordsSuccess);
+};
+
+var insertRecords = function(tx){
+	var tableName = "Words";
+	for(var item in wordsFromFile){
+		var sql = "INSERT INTO " + tableName + 
+				"('level0','level1','level2','jiaming','jieshi') " +
+				"VALUES " +
+				"(" + item[0] + ", " +
+					item[1] + ", " +
+					item[2] + ", " +
+					"'" + item[3] + "'" +
+					"'" + item[4] + "'" +
+				")";
+		tx.executeSql(sql);
+	}
+	wordsFromFile = null;
+};
+
+var insertRecordsSuccess = function(){
+	alert("数据终于他妈的都插入了");
 };
 
 // =========================================
 
 var onError = function(evt){
-	alert("an error occurred");
+	alert("草，怎么出错了！算了，联系作者吧。");
 };
