@@ -14,22 +14,53 @@ $("#mainPage").live("pageinit",function(event,data){
 		selectedPath.level0 = $(this).attr("value");
 		console.log("tap fired : %d",selectedPath.level0);
 	}).eq(selectedPath.level0).addClass("ui-btn-active");
+	
+	// cvs operation ===========================
+	
+	$(document).bind("deviceready",function(){
+		$("#refresh-btn").live("tap",readCSV);
+	});
 });
 
-//cvs operation ===========================
+var readCSV = function()
+{
+	console.log("begin read csv");
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onError);
+};
 
 
+var onFileSystemSuccess = function(fileSystem){
+	fileSystem.root.getFile("wordlist.csv",null,gotFileEntry,onError);
+	console.log("file system OK");
+};
+
+var gotFileEntry = function(fileEntry){
+	fileEntry.file(gotFile,onError);
+};
+
+var gotFile = function(file){
+	var reader = new FileReader();
+	reader.onloadend = function(evt){
+		parseCSV(evt.target.result);
+	};
+	reader.readAsText(file);
+};
+
+var onError = function(evt){
+	alert("file system error");
+	console.log(evt.target.error.code);
+};
 
 var parseCSV = function(csvString)
 {
-    $.csv.toArray(csvString,null,saveWordsToDB);
-}
+    $.csv.toArrays(csvString,{},saveWordsToDB);
+};
 
-//db operation ============================
+// db operation ============================
 
-var saveWordsToDB = function(wordsArray)
+var saveWordsToDB = function(error,wordsArray)
 {
-	
-}
+	console.log(wordsArray);
+};
 
-//=========================================
+// =========================================
