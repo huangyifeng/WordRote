@@ -46,10 +46,6 @@ var gotFile = function(file){
 	reader.readAsText(file);
 };
 
-var onError = function(evt){
-	alert("file system error");
-	console.log(evt.target.error.code);
-};
 
 var parseCSV = function(csvString)
 {
@@ -61,6 +57,12 @@ var parseCSV = function(csvString)
 var saveWordsToDB = function(error,wordsArray)
 {
 	console.log(wordsArray);
+	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",1000000);
+	db.transaction("initDB")
 };
 
 // =========================================
+
+var onError = function(evt){
+	alert("an error occurred");
+};
