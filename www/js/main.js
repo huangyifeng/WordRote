@@ -4,6 +4,8 @@ var selectedPath = {
 	level2 : 0
 };
 
+var tableName = "tab_words";
+
 var wordsFromFile = null;
 
 $(document).bind("mobileinit",function(event,data){
@@ -14,7 +16,6 @@ $("#mainPage").live("pageinit",function(event,data){
 	$.mobile.changePage("./html/verb.html");
 	$(".li_level0").live("tap",function(event,data){
 		selectedPath.level0 = $(this).attr("value");
-		console.log("tap fired : %d",selectedPath.level0);
 	}).eq(selectedPath.level0).addClass("ui-btn-active");
 	
 	// cvs operation ===========================
@@ -26,17 +27,16 @@ $("#mainPage").live("pageinit",function(event,data){
 
 var readCSV = function()
 {
-	console.log("begin read csv");
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onError);
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileError);
 };
 
 var onFileSystemSuccess = function(fileSystem){
-	fileSystem.root.getFile("wordlist.csv",null,gotFileEntry,onError);
+	fileSystem.root.getFile("wordlist.csv",null,gotFileEntry,onFileError);
 	console.log("file system OK");
 };
 
 var gotFileEntry = function(fileEntry){
-	fileEntry.file(gotFile,onError);
+	fileEntry.file(gotFile,onFileError);
 };
 
 var gotFile = function(file){
@@ -56,41 +56,46 @@ var parseCSV = function(csvString)
 
 var saveWordsToDB = function(error,wordsArray)
 {
-	console.log(wordsArray);
 	wordsFromFile = wordsArray;
-	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",1000000);
-	db.transaction(initDB,onError,initDBSuccess);
+	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",2000000);
+	db.transaction(initDB,onDatabaseError,initDBSuccess);
 };
 
 var initDB = function(transaction){
-	var tableName = "Words";
 	transaction.executeSql("Drop table if exists " + tableName);
-	transaction.executeSql("Create table if not exists " + tableName + 
+	var createSql = "Create table if not exists " + tableName + 
 			"('col_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
 			"'level0' INTEGER DEFAULT 0," +
 			"'level1' INTEGER DEFAULT 0," +
 			"'level2' INTEGER DEFAULT 0," +
 			"'jiaming' VARCHAR(255)," +
-			"'jieshi' VARCHAR(255))");
+			"'jieshi' VARCHAR(255))";
+    console.log("create table statement: " + createSql);
+	transaction.executeSql(createSql);
 };
 
 var initDBSuccess = function(){
-	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",1000000);
-	db.transaction(insertRecords,onError,insertRecordsSuccess);
+	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",2000000);
+	db.transaction(insertRecords,onDatabaseError,insertRecordsSuccess);
 };
 
 var insertRecords = function(tx){
-	var tableName = "Words";
-	for(var item in wordsFromFile){
+	for(var index = 0,length = wordsFromFile.length; index < length; index++)
+	{
+		var item = wordsFromFile[index];
+        if(item[0] == "" || item[0] == undefined){
+        	continue;
+        }
 		var sql = "INSERT INTO " + tableName + 
-				"('level0','level1','level2','jiaming','jieshi') " +
+				" (level0,level1,level2,jiaming,jieshi) " +
 				"VALUES " +
 				"(" + item[0] + ", " +
 					item[1] + ", " +
 					item[2] + ", " +
-					"'" + item[3] + "'" +
+					"'" + item[3] + "', " +
 					"'" + item[4] + "'" +
-				")";
+				");";
+        console.log("insert statement is : " + sql);
 		tx.executeSql(sql);
 	}
 	wordsFromFile = null;
@@ -102,6 +107,23 @@ var insertRecordsSuccess = function(){
 
 // =========================================
 
-var onError = function(evt){
-	alert("草，怎么出错了！算了，联系作者吧。");
+var onFileError = function(error){
+    if(error.code == FileError.NOT_FOUND_ERR){
+    	showError("大哥，你文件都没放进来，我怎么导入啊。");
+    }
+    else{
+    	onError(error);
+    }
+};
+
+var onDatabaseError = function(error){
+	onError(error);
+};
+
+var onError = function(error){
+	showError("草，怎么出错了！联系作者吧。");
+};
+
+var showError = function(msg){
+	alert(msg);
 };
