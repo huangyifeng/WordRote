@@ -5,6 +5,8 @@ var selectedPath = {
 };
 
 var tableName = "tab_words";
+var isEverImportDataKey = "com.huangyifeng.isEverImportData";
+var isEverImportDataValue = "com.huangyifeng.isEverImportData.Yes";
 
 var wordsFromFile = null;
 
@@ -22,7 +24,12 @@ $("#mainPage").live("pageinit",function(event,data){
 	
 	$(document).bind("deviceready",function(){
 		$("#refresh-btn").live("tap",readCSV);
+        var storagedValue = window.localStorage.getItem(isEverImportDataKey);
+        if(isEverImportDataValue != storagedValue){
+            $("#refresh-btn").trigger("tap");
+        }
 	});
+                    
 });
 
 var readCSV = function()
@@ -103,6 +110,7 @@ var insertRecords = function(tx){
 
 var insertRecordsSuccess = function(){
 	alert("数据终于他妈的都插入了");
+    window.localStorage.setItem(isEverImportDataKey,isEverImportDataValue);
 };
 
 // =========================================

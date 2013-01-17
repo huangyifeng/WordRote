@@ -13,7 +13,7 @@ var getWordListFromDB = function(tx){
 };
 
 var querySuccess = function(tx,result){
-//	console.log("selected rows is:" + result.rows.length);
+	console.log("selected rows is:" + result.rows.length);
 //	console.log("selected rows[0] is:" + result.rows.item(0));
 	showWordList(result.rows);
 };

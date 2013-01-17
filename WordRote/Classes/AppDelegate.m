@@ -47,6 +47,24 @@
     return self;
 }
 
+#pragma mark - private 
+
+- (void)copyWordListToDocument
+{
+    NSString *key = @"com.huangyifeng.copyed";
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults boolForKey:key])
+    {
+        return;
+    }
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    
+    [userDefaults setBool:YES forKey:key];
+    [userDefaults synchronize];
+}
+
 #pragma UIApplicationDelegate implementation
 
 /**
@@ -61,6 +79,8 @@
         invokeString = [url absoluteString];
         NSLog(@"WordRote launchOptions = %@", url);
     }
+    
+    [self copyWordListToDocument];
 
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
