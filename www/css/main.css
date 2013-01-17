@@ -1,1 +1,15 @@
 @CHARSET "UTF-8";
+.word-list-jiaming{
+	font-size: 13px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.word-list-jieshi{
+    padding-top: 5px;
+    color: #00A1C9;
+	font-size: 13px;
+    text-align: right;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
