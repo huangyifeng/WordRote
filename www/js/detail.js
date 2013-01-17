@@ -8,12 +8,13 @@ var getWordListFromDB = function(tx){
 			" WHERE level0 = " + selectedPath.level0 +
 			" AND level1 = " + selectedPath.level1 +
 			" AND level2 = " + selectedPath.level2;
-	console.log("query sql is: " + sql);
+//	console.log("query sql is: " + sql);
 	tx.executeSql(sql,[],querySuccess,queryFailed);
 };
 
 var querySuccess = function(tx,result){
-	console.log("selected rows is:" + result.rows.length);
+//	console.log("selected rows is:" + result.rows.length);
+//	console.log("selected rows[0] is:" + result.rows.item(0));
 	showWordList(result.rows);
 };
 
@@ -23,6 +24,22 @@ var queryFailed = function(tx,error){
 
 //UI ======================
 var showWordList = function(list){
-	console.log(list);
-	console.log(list.item(0));
+	console.log("show word list run");
+	var wordsList = $("#words-list-view").empty();
+	for(var index = 0,length = list.length;index < length;index++){
+		var worditem = list.item(index);
+        console.log("worditem is " + worditem);
+		var cell = createAWordListCell(worditem);
+		wordsList.append(cell);
+	}
+	wordsList.listview("refresh");
 };
+
+var createAWordListCell = function(worditem){
+	var jiaming = $("<p />", {class: "word-list-jiaming"}).html(worditem.jiaming);
+	var jieshi = $("<p />", {class: "word-list-jieshi"}).html(worditem.jieshi);
+	var cell = $("<li />",{class:"word-cell"}).append(jiaming).append(jieshi);
+	
+	return cell;
+	
+}
