@@ -34,12 +34,13 @@ $("#mainPage").live("pageinit",function(event,data){
 
 var readCSV = function()
 {
+    $.mobile.showPageLoadingMsg("b","别急，帮你导入文件呢。",false);
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileError);
 };
 
 var onFileSystemSuccess = function(fileSystem){
 	fileSystem.root.getFile("wordlist.csv",null,gotFileEntry,onFileError);
-	console.log("file system OK");
+//	console.log("file system OK");
 };
 
 var gotFileEntry = function(fileEntry){
@@ -56,6 +57,7 @@ var gotFile = function(file){
 
 var parseCSV = function(csvString)
 {
+//    console.log("csv string is: " + csvString);
     $.csv.toArrays(csvString,{},saveWordsToDB);
 };
 
@@ -77,7 +79,7 @@ var initDB = function(transaction){
 			"'level2' INTEGER DEFAULT 0," +
 			"'jiaming' VARCHAR(255)," +
 			"'jieshi' VARCHAR(255))";
-    console.log("create table statement: " + createSql);
+//    console.log("create table statement: " + createSql);
 	transaction.executeSql(createSql);
 };
 
@@ -102,7 +104,7 @@ var insertRecords = function(tx){
 					"'" + item[3] + "', " +
 					"'" + item[4] + "'" +
 				");";
-        console.log("insert statement is : " + sql);
+//        console.log("insert statement is : " + sql);
 		tx.executeSql(sql);
 	}
 	wordsFromFile = null;
@@ -110,6 +112,7 @@ var insertRecords = function(tx){
 
 var insertRecordsSuccess = function(){
 	alert("数据终于他妈的都插入了");
+    $.mobile.hidePageLoadingMsg();
     window.localStorage.setItem(isEverImportDataKey,isEverImportDataValue);
 };
 

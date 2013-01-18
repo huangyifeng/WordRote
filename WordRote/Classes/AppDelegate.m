@@ -59,10 +59,22 @@
     }
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fromPath = [[NSBundle mainBundle] pathForResource:@"wordlist" ofType:@"csv"];
+    NSArray *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *toPath = [documents objectAtIndex:0];
+    toPath = [toPath stringByAppendingPathComponent:@"wordlist.csv"];
     
-    
-    [userDefaults setBool:YES forKey:key];
-    [userDefaults synchronize];
+    NSError *error = nil;
+    [fileManager copyItemAtPath:fromPath toPath:toPath error:&error];
+    if (error)
+    {
+        NSLog(@"error:%@",error);
+    }
+    else
+    {
+        [userDefaults setBool:YES forKey:key];
+        [userDefaults synchronize];
+    }
 }
 
 #pragma UIApplicationDelegate implementation

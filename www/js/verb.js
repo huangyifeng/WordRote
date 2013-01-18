@@ -1,5 +1,5 @@
 $("#verbPage").bind("pageinit",function(event,data){
-	console.log("verbPage page init");
+//	console.log("verbPage page init");
 	$.get("../res/verb.xml",null,function(xml){
 		$("#verbListView").empty();
 		$(xml).find("item").each(function(index){
@@ -10,7 +10,7 @@ $("#verbPage").bind("pageinit",function(event,data){
 		$(".li_level1").one("tap",function(event,data){
 			var value = $(this).attr("value");
 			selectedPath.level1 = value;
-			console.log("value is %d",value);
+//			console.log("value is %d",value);
 		});
 		$("#verbListView").listview("refresh");
 	},"xml");

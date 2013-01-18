@@ -13,7 +13,7 @@ var getWordListFromDB = function(tx){
 };
 
 var querySuccess = function(tx,result){
-	console.log("selected rows is:" + result.rows.length);
+//	console.log("selected rows is:" + result.rows.length);
 //	console.log("selected rows[0] is:" + result.rows.item(0));
 	showWordList(result.rows);
 };
@@ -24,11 +24,11 @@ var queryFailed = function(tx,error){
 
 //UI ======================
 var showWordList = function(list){
-	console.log("show word list run");
+//	console.log("show word list run");
 	var wordsList = $("#words-list-view").empty();
 	for(var index = 0,length = list.length;index < length;index++){
 		var worditem = list.item(index);
-        console.log("worditem is " + worditem);
+//        console.log("worditem is " + worditem);
 		var cell = createAWordListCell(worditem);
 		wordsList.append(cell);
 	}
