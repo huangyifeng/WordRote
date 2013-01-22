@@ -1,4 +1,4 @@
-$("#detail-page").bind("pageinit",function(){
+$("#detail-page").live("pageinit",function(){
 	var db = window.openDatabase("wordslist.db","1.0","wordslist DB",2000000);
 	db.transaction(getWordListFromDB,onDatabaseError);
 });

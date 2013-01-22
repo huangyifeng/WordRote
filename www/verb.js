@@ -1,6 +1,6 @@
-$("#verbPage").bind("pageinit",function(event,data){
+$("#verbPage").live("pageinit",function(event,data){
 //	console.log("verbPage page init");
-	$.get("../res/verb.xml",null,function(xml){
+	$.get("verb.xml",null,function(xml){
 		$("#verbListView").empty();
 		$(xml).find("item").each(function(index){
 			var aItem = $("<a />",{href:"page2.html"}).html($(this).text());
