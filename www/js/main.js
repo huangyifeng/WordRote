@@ -7,7 +7,6 @@ var selectedPath = {
 var tableName = "tab_words";
 var isEverImportDataKey = "com.huangyifeng.isEverImportData";
 var isEverImportDataValue = "com.huangyifeng.isEverImportData.Yes";
-var verbXMLPath = "./res/verb.xml";
 
 var wordsFromFile = null;
 

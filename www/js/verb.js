@@ -2,7 +2,7 @@
 $("#verbPage").bind("pageinit",function(event,data){
 //	console.log("verbPage page init");
 //                    console.log("location is " + document.location.href);
-	$.get(verbXMLPath, null,function(xml){
+	$.get("../res/verb.xml", null,function(xml){
 		$("#verbListView").empty();
 		$(xml).find("item").each(function(index){
 			var aItem = $("<a />",{href:"page2.html"}).html($(this).text());
@@ -16,5 +16,4 @@ $("#verbPage").bind("pageinit",function(event,data){
 		});
 		$("#verbListView").listview("refresh");
 	},"xml");
-    verbXMLPath = "../res/verb.xml";
 });
